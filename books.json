@@ -30,5 +30,21 @@
     "year": 1950,
     "genre": "Dystopian",
     "pages": 100
+  },
+  {
+    "id": 5,
+    "title": "İnce Memed",
+    "author": "Yaşar Kemal",
+    "year": 1945,
+    "genre": "Fiction",
+    "pages": 824
+  },
+  {
+    "id": 6,
+    "title": "İince Memed",
+    "author": "Yaşar Kemal",
+    "year": 1945,
+    "genre": "Fiction",
+    "pages": 824
   }
 ]

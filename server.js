@@ -36,7 +36,7 @@ const writeData = (books) => {
 };
 
 // read books crud
-app.get("/", (req, res) => {
+app.get("/books", (req, res) => {
     const data = readData();
     if (data.length > 0) {
         res.json(data);
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 });
 
 // Create a new book (POST request)
-app.post("/", (req, res) => {
+app.post("/books", (req, res) => {
     const { title, author, year, genre, pages } = req.body;
 
     if (!title || !author || !year || !genre || !pages) {
@@ -125,8 +125,37 @@ app.post("/", (req, res) => {
 });
 
 */
+// update books crud with params
+app.put("/books/:id", (req, res) => {
+    const { id: bookID } = req.params;
+    const updates = req.body;
+
+    if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ success: false, message: "Invalid book ID." });
+    }
+
+    if (Object.keys(updates).length === 0) {
+        return res.status(400).json({ success: false, message: "No data provided for update." });
+    }
+
+    let books = readData();
+    const findBook = books.find((book) => book.id === Number(bookID));
+    if (findBook) {
+        books = books.map((book) => {
+            if (book.id === Number(bookID)) {
+                return { ...book, ...updates }
+            }
+            return book;
+        });
+        writeData(books);
+        res.status(200).json({ success: true, books });
+    } else {
+        return res.status(404).json({ success: false, message: "Book is not found." });
+    }
+});
 
 // update books crud with body
+/*
 app.put("/", (req, res) => {
     const { id: bookID, ...updates } = req.body;
     let books = readData();
@@ -141,7 +170,7 @@ app.put("/", (req, res) => {
         writeData(books);
         res.json({ success: true, books })
     } else {
-        res.json({ success: false, message: "Book is not found." });
+        return res.status(404).json({ success: false, message: "Book is not found." });
     }
 });
 // update books crud with body
@@ -168,7 +197,7 @@ app.put("/", (req, res) => {
 
 
 // delete books crud with body
-app.delete("/", (req, res) => {
+app.delete("/books/:id", (req, res) => {
     const { bookID } = req.body;
     let books = readData();
     if (!bookID || isNaN(Number(bookID))) {

@@ -45,8 +45,39 @@ app.get("/", (req, res) => {
     }
 });
 
-// create books crud
+// Create a new book (POST request)
 app.post("/", (req, res) => {
+    const { title, author, year, genre, pages } = req.body;
+
+    if (!title || !author || !year || !genre || !pages) {
+        return res.status(400).json({ success: false, message: "All fields (title, author, year, genre, pages) are required." });
+    }
+
+    let books = readData();
+
+    const findTitle = books.find((book) => book.title.toLowerCase() === title.toLowerCase());
+    if (findTitle) {
+        return res.status(409).json({ success: false, message: "A book with the same title already exists." });
+    }
+
+    const newID = books.length > 0 ? Math.max(...books.map((book) => book.id)) + 1 : 1;
+
+    const newBook = {
+        id: newID,
+        title,
+        author,
+        year,
+        genre,
+        pages
+    };
+
+    books.push(newBook);
+    writeData(books);
+
+    res.status(201).json({ success: true, message: "Book added successfully.", books });
+});
+
+/*app.post("/", (req, res) => {
     const newBook = req.body;
 
     if (!newBook.id || isNaN(Number(newBook.id))) {
@@ -64,7 +95,6 @@ app.post("/", (req, res) => {
     }
     res.status(201).json(books);
 })
-/*
 // Create a new book (POST request)
 app.post("/", (req, res) => {
     const newBook = req.body;
@@ -140,7 +170,18 @@ app.put("/", (req, res) => {
 // delete books crud with body
 app.delete("/", (req, res) => {
     const { bookID } = req.body;
+    let books = readData();
+    if (!bookID || isNaN(Number(bookID))) {
+        return res.status(400).json({ success: false, message: "Invalid book ID." });
+    }
+    const bookExists = books.some((book) => book.id === Number(bookID));
 
+    if (!bookExists) {
+        return res.status(404).json({ success: false, message: "Book not found." });
+    }
+    books = books.filter((book) => book.id !== Number(bookID));
+    writeData(books);
+    res.status(200).json({ success: true, message: "Book deleted successfully.", books });
 });
 
 // listening to server

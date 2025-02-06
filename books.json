@@ -22,5 +22,29 @@
     "year": 1949,
     "genre": "Dystopian",
     "pages": 328
+  },
+  {
+    "id": 4,
+    "title": "1984",
+    "author": "George Orwell",
+    "year": 1949,
+    "genre": "Dystopian",
+    "pages": 328
+  },
+  {
+    "id": 5,
+    "title": "Küçük Prens",
+    "author": "Antoine de Saint-Exupéry",
+    "year": 1943,
+    "genre": "Children's literature",
+    "pages": 96
+  },
+  {
+    "id": 6,
+    "title": "Sofinin Dünyası",
+    "author": "George Orwell",
+    "year": 1949,
+    "genre": "Dystopian",
+    "pages": 328
   }
 ]
